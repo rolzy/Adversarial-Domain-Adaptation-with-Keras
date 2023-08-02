@@ -4,7 +4,7 @@ import sys
 import argparse
 import random
 import numpy as np
-import tensorflow
+import tensorflow as tf
 
 os.environ['PYTHONHASHSEED']=str(SEED)
 np.random.seed(SEED)
@@ -15,11 +15,14 @@ from PIL import Image
 from keras.utils import to_categorical
 from keras.layers import Input
 from keras.optimizers import Adam
-from tensorflow.python.keras.utils.multi_gpu_utils import multi_gpu_model
-#from keras.utils import multi_gpu_model
 from sklearn.metrics import accuracy_score
 import model
 import optimizer
+
+cluster_resolver = tf.distribute.cluster_resolver.TPUClusterResolver()
+tf.config.experimental_connect_to_cluster(cluster_resolver)
+tf.tpu.experimental.initialize_tpu_system(cluster_resolver)
+tpu_strategy = tf.distribute.TPUStrategy(cluster_resolver)
 
 def pil_loader(path):
     # Return the RGB variant of input image
@@ -75,9 +78,10 @@ def train(param):
     discriminator = model.build_discriminator(param, embedding)
 
     if param["number_of_gpus"] > 1:
-        models["combined_classifier"] = multi_gpu_model(model.build_combined_classifier(inp, classifier), gpus = param["number_of_gpus"])
-        models["combined_discriminator"] = multi_gpu_model(model.build_combined_discriminator(inp, discriminator), gpus = param["number_of_gpus"])
-        models["combined_model"] = multi_gpu_model(model.build_combined_model(inp, [classifier, discriminator]), gpus = param["number_of_gpus"])
+        with tpu_strategy.scope():
+            models["combined_classifier"] = model.build_combined_classifier(inp, classifier)
+            models["combined_discriminator"] = model.build_combined_discriminator(inp, discriminator)
+            models["combined_model"] = model.build_combined_model(inp, [classifier, discriminator])
     else:
         models["combined_classifier"] = model.build_combined_classifier(inp, classifier)
         models["combined_discriminator"] = model.build_combined_discriminator(inp, discriminator)
