@@ -15,7 +15,8 @@ from PIL import Image
 from keras.utils import to_categorical
 from keras.layers import Input
 from keras.optimizers import Adam
-from keras.utils import multi_gpu_model
+from tensorflow.python.keras.utils.multi_gpu_utils import multi_gpu_model
+#from keras.utils import multi_gpu_model
 from sklearn.metrics import accuracy_score
 import model
 import optimizer
