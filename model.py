@@ -1,7 +1,7 @@
 import random
 import numpy as np
 from keras.models import Model
-from keras.applications.resnet50 import ResNet50
+from tensorflow.keras.applications.resnet50 import ResNet50
 from keras.layers import Input, Conv2D, MaxPool2D, Flatten, Dense
 from keras.layers import BatchNormalization, Activation, Dropout
 
