@@ -175,7 +175,7 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(description = 'Domain Adaptation')
     parser.add_argument('--number_of_gpus', type = int, nargs = '?', default = '1', help = "Number of gpus to run")
     parser.add_argument('--network_name', type = str, default = 'ResNet50', help = "Name of the feature extractor network")
-    parser.add_argument('--dataset_name', type = str, default = 'Office', help = "Name of the source dataset")
+    parser.add_argument('--dataset_name', type = str, default = 'office', help = "Name of the source dataset")
     parser.add_argument('--dropout_classifier', type = float, default = 0.25, help = "Dropout ratio for classifier")
     parser.add_argument('--dropout_discriminator', type = float, default = 0.25, help = "Dropout ratio for discriminator")    
     parser.add_argument('--source_path', type = str, default = 'amazon_10_list.txt', help = "Path to source dataset")
@@ -228,8 +228,8 @@ if __name__ == "__main__":
     param["drop_classifier"] = args.dropout_classifier
     param["drop_discriminator"] = args.dropout_discriminator
     param["test_interval"] = args.test_interval
-    param["source_path"] = os.path.join("Data", args.dataset_name, args.source_path)
-    param["target_path"] = os.path.join("Data", args.dataset_name, args.target_path)
+    param["source_path"] = os.path.join("data", args.dataset_name, args.source_path)
+    param["target_path"] = os.path.join("data", args.dataset_name, args.target_path)
     param["snapshot_interval"] = args.snapshot_interval
     param["output_path"] = os.path.join("Snapshot", args.output_dir)
 
