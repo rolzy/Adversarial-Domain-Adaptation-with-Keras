@@ -4,3 +4,4 @@
 __pycache__
 env
 data/office/domain_adaptation_images/*
+.python-version

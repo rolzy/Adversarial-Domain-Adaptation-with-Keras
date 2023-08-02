@@ -4,11 +4,11 @@ import sys
 import argparse
 import random
 import numpy as np
-from tensorflow import set_random_seed
+import tensorflow
 
 os.environ['PYTHONHASHSEED']=str(SEED)
 np.random.seed(SEED)
-set_random_seed(SEED)
+tensorflow.random.set_random_seed(SEED)
 random.seed(SEED)
 
 from PIL import Image
