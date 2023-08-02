@@ -8,7 +8,7 @@ import tensorflow as tf
 
 os.environ['PYTHONHASHSEED']=str(SEED)
 np.random.seed(SEED)
-tensorflow.random.set_seed(SEED)
+tf.random.set_seed(SEED)
 random.seed(SEED)
 
 from PIL import Image
