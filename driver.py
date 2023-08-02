@@ -87,10 +87,10 @@ def train(param):
         models["combined_discriminator"] = model.build_combined_discriminator(inp, discriminator)
         models["combined_model"] = model.build_combined_model(inp, [classifier, discriminator])
 
-    models["combined_classifier"].compile(optimizer = optimizer.opt_classifier(param), loss = 'categorical_crossentropy', metrics = ['accuracy'])
-    models["combined_discriminator"].compile(optimizer = optimizer.opt_discriminator(param), loss = 'binary_crossentropy', metrics = ['accuracy'])
+    models["combined_classifier"].compile(optimizer = optimizer.opt_classifier(param), loss = 'categorical_crossentropy', metrics = [tf.keras.metrics.CategoricalAccuracy()])
+    models["combined_discriminator"].compile(optimizer = optimizer.opt_discriminator(param), loss = 'binary_crossentropy', metrics = [tf.keras.metrics.CategoricalAccuracy()])
     models["combined_model"].compile(optimizer = optimizer.opt_combined(param), loss = {'class_act_last': 'categorical_crossentropy', 'dis_act_last': \
-        'binary_crossentropy'}, loss_weights = {'class_act_last': param["class_loss_weight"], 'dis_act_last': param["dis_loss_weight"]}, metrics = ['accuracy'])
+        'binary_crossentropy'}, loss_weights = {'class_act_last': param["class_loss_weight"], 'dis_act_last': param["dis_loss_weight"]}, metrics = [tf.keras.metrics.CategoricalAccuracy()])
 
     Xs, ys = param["source_data"], param["source_label"]
     Xt, yt = param["target_data"], param["target_label"]
