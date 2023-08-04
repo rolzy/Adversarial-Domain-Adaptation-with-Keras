@@ -19,10 +19,7 @@ from sklearn.metrics import accuracy_score
 import model
 import optimizer
 
-cluster_resolver = tf.distribute.cluster_resolver.TPUClusterResolver()
-tf.config.experimental_connect_to_cluster(cluster_resolver)
-tf.tpu.experimental.initialize_tpu_system(cluster_resolver)
-tpu_strategy = tf.distribute.TPUStrategy(cluster_resolver)
+mirrored_strategy = tf.distribute.MirroredStrategy()
 
 def pil_loader(path):
     # Return the RGB variant of input image
@@ -78,7 +75,7 @@ def train(param):
     discriminator = model.build_discriminator(param, embedding)
 
     if param["number_of_gpus"] > 1:
-        with tpu_strategy.scope():
+        with mirrored_strategy.scope():
             models["combined_classifier"] = model.build_combined_classifier(inp, classifier)
             models["combined_discriminator"] = model.build_combined_discriminator(inp, discriminator)
             models["combined_model"] = model.build_combined_model(inp, [classifier, discriminator])
